@@ -89,27 +89,59 @@ func sieveOfEratosthenes(highest: Int) -> [Bool] {
 // This function is easy to create using previous one, and returns the result in a more user-friendly form.
 // You just need to return an ascending list of primes using the result from sieveOfEratosthenes
 func primes(highest: Int) -> [Int] {
-    return []
+    var tempArray: [Int] = []
+    var temp = 0
+    let boolArray = sieveOfEratosthenes(highest)
+    for things in boolArray
+    {
+        if things == true {
+            tempArray.append(temp)
+        }
+        temp += 1
+    }
+    return tempArray
 }
 
 // Given a list of candidate factors, this should return the first factor of h. If none of the candidate factors are factors of h, then return nil.
 func factor(h: Int, candidates: [Int]) -> Int? {
-    return nil
+    var temp: Int?
+    for item in candidates{
+        if h % item == 0 {
+            temp = item
+            break
+        }
+    }
+    return temp
 }
 
 // Given a list of candidate factors, this should return all the factors of g. You just repeatedly call the previous function, and if you get a factor, you append it to the list and divide g by that factor. Repeat until there are no more factors.
 func factors(g: Int, candidates: [Int]) -> [Int] {
-    return []
+    var tempArray: [Int] = []
+    var temp = g
+    while (factor(temp, candidates: candidates) != nil) {
+        tempArray.append(factor(temp, candidates: candidates)!)
+        temp = temp/factor(temp, candidates: candidates)!
+    }
+    return tempArray
 }
 
 // This function should first generate a list of primes that are candidates to divide g. HINT: the largest prime that could possibly divide g is less than or equal to the square root of g. Once you have the list of candidates, just call the previous function.
 func factors(g: Int) -> [Int] {
-    return []
+    return factors(g, candidates: primes(Int(sqrt(Double(g)))))
 }
+
 
 // This function returns all coprimes of a given integer f that are smaller than f. Basically, you need to first factor f. Then you need to look at all the numbers in the range 2..<f. For each of those numbers, test whether any of the factors of f divides the number.
 func coprimes(f: Int) -> [Int] {
-    return []
+    var tempArray: [Int] = []
+    let factorsArray = factors(f)
+    for item in 2..<f
+    {
+        if factors(item, candidates: factorsArray) == []{
+            tempArray.append(item)
+        }
+    }
+    return tempArray
 }
 
 protocol Crypto {
